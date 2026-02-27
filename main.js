@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initScrollAnimations();
     // initNewsFilters() is called after loading news
     setActiveNav();
+    initCookieConsent();
 });
 
 /* ---------- Component Loader ---------- */
@@ -216,4 +217,80 @@ async function loadNews() {
     } catch (e) {
         console.warn('News could not be loaded:', e);
     }
+}
+
+/* ---------- Cookie Consent ---------- */
+const GA_ID = 'G-776SH91MXM';
+
+function initCookieConsent() {
+    const consent = localStorage.getItem('cookie_consent');
+    if (consent === 'accepted') {
+        loadGoogleAnalytics();
+    } else if (consent !== 'rejected') {
+        // Show banner only if not yet decided
+        showCookieConsentBanner();
+    }
+}
+
+function loadGoogleAnalytics() {
+    // Prevent double-loading
+    if (document.querySelector('script[src*="googletagmanager"]')) return;
+
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
+    document.head.appendChild(script);
+
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', GA_ID);
+}
+
+function showCookieConsentBanner() {
+    const depth = getPathDepth();
+    const prefix = depth > 0 ? '../'.repeat(depth) : '';
+    const privacyUrl = prefix + 'PrivacyPolicy.html';
+
+    const banner = document.createElement('div');
+    banner.className = 'cookie-consent';
+    banner.id = 'cookie-consent-banner';
+    banner.innerHTML = `
+        <div class="cookie-consent__inner">
+            <div class="cookie-consent__text">
+                <p>当サイトでは、サービス向上のためにGoogle Analyticsを使用し、Cookieによるアクセス情報を収集しています。詳しくは<a href="${privacyUrl}">プライバシーポリシー</a>をご覧ください。</p>
+            </div>
+            <div class="cookie-consent__buttons">
+                <button class="cookie-consent__btn cookie-consent__btn--accept" id="cookie-accept-btn">同意する</button>
+                <button class="cookie-consent__btn cookie-consent__btn--reject" id="cookie-reject-btn">拒否する</button>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(banner);
+
+    // Trigger animation after insertion
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            banner.classList.add('visible');
+        });
+    });
+
+    banner.querySelector('#cookie-accept-btn').addEventListener('click', () => {
+        localStorage.setItem('cookie_consent', 'accepted');
+        loadGoogleAnalytics();
+        hideBanner(banner);
+    });
+
+    banner.querySelector('#cookie-reject-btn').addEventListener('click', () => {
+        localStorage.setItem('cookie_consent', 'rejected');
+        hideBanner(banner);
+    });
+}
+
+function hideBanner(banner) {
+    banner.classList.remove('visible');
+    banner.addEventListener('transitionend', () => {
+        banner.remove();
+    }, { once: true });
 }
