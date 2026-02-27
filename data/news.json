@@ -1,0 +1,58 @@
+[
+    {
+        "date": "2026.02.26",
+        "label": "release",
+        "labelName": "リリース",
+        "title": "ayase-tech公式サイトを公開しました",
+        "url": "#"
+    },
+    {
+        "date": "2026.02.26",
+        "label": "info",
+        "labelName": "お知らせ",
+        "title": "V-adsyncサービスの事前登録を開始します",
+        "url": "#"
+    },
+    {
+        "date": "2026.02.26",
+        "label": "info",
+        "labelName": "お知らせ",
+        "title": "学生・団体支援プログラムの詳細を公開しました",
+        "url": "#"
+    },
+    {
+        "date": "2026.02.25",
+        "label": "important",
+        "labelName": "重要",
+        "title": "サービス利用規約を制定しました",
+        "url": "#"
+    },
+    {
+        "date": "2026.02.20",
+        "label": "event",
+        "labelName": "イベント",
+        "title": "V-adsync導入説明会を開催予定です",
+        "url": "#"
+    },
+    {
+        "date": "2026.02.18",
+        "label": "maintenance",
+        "labelName": "メンテナンス",
+        "title": "システムメンテナンスのお知らせ（2月20日予定）",
+        "url": "#"
+    },
+    {
+        "date": "2026.02.15",
+        "label": "release",
+        "labelName": "リリース",
+        "title": "V-adsync管理画面 β版をリリースしました",
+        "url": "#"
+    },
+    {
+        "date": "2026.02.10",
+        "label": "info",
+        "labelName": "お知らせ",
+        "title": "ワールド管理者向けドキュメントを公開しました",
+        "url": "#"
+    }
+]

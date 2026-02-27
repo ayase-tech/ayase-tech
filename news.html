@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="page-depth" content="0">
+    <title>お知らせ — ayase-tech</title>
+    <meta name="description" content="ayase-techからの最新のお知らせ、リリース情報、メンテナンス情報をお届けします。">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div id="site-header"></div>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="index.html">ホーム</a>
+                <span>/</span>
+                <span>お知らせ</span>
+            </div>
+            <h1>お知らせ</h1>
+            <p>ayase-techからの最新情報をお届けします。</p>
+        </div>
+    </div>
+
+    <!-- News List -->
+    <section class="section">
+        <div class="container container--narrow">
+            <!-- Filter Buttons -->
+            <div class="news-filters fade-in">
+                <button class="news-filter-btn active" data-filter="all">すべて</button>
+                <button class="news-filter-btn" data-filter="info">お知らせ</button>
+                <button class="news-filter-btn" data-filter="release">リリース</button>
+                <button class="news-filter-btn" data-filter="maintenance">メンテナンス</button>
+                <button class="news-filter-btn" data-filter="important">重要</button>
+                <button class="news-filter-btn" data-filter="event">イベント</button>
+            </div>
+
+            <!-- News Items (loaded dynamically from /api/news) -->
+            <div class="fade-in" id="news-container-all">
+                <div style="text-align:center; padding: var(--space-2xl) 0; color: var(--color-text-lighter);">
+                    読み込み中…
+                </div>
+            </div>
+            <div class="button_to_note" style="text-align:center; padding: var(--space-2xl) 0;">
+                <button class="btn btn--outline btn--sm" style="text-align: center;"
+                    onclick="window.open('https://note.com/ayase_tech', '_blank');">全てのお知らせはこちら</button>
+            </div>
+        </div>
+    </section>
+
+    <div id="site-footer"></div>
+
+    <script src="main.js"></script>
+</body>
+
+</html>
