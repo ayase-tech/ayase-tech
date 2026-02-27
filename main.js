@@ -250,7 +250,7 @@ function loadGoogleAnalytics() {
 function showCookieConsentBanner() {
     const depth = getPathDepth();
     const prefix = depth > 0 ? '../'.repeat(depth) : '';
-    const privacyUrl = prefix + 'PrivacyPolicy.html';
+    const privacyUrl = prefix + 'About/legal/PrivacyPolicy.html';
 
     const banner = document.createElement('div');
     banner.className = 'cookie-consent';
