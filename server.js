@@ -6,10 +6,7 @@ const app = express();
 const port = process.env.PORT || 8080;
 const parser = new Parser();
 
-// ★ ご自身のnote IDに変更してください
-// (例: URLが https://note.com/ayase_tech の場合、'ayase_tech')
-const NOTE_ID = process.env.NOTE_ID || 'ayase_tech'; // デフォルトのIDを設定
-
+const NOTE_ID = process.env.NOTE_ID || 'ayase_tech';
 // APIエンドポイント: noteのRSSを取得してJSONで返す
 app.get('/api/news', async (req, res) => {
     try {
