@@ -45,8 +45,8 @@ app.get('/api/news', async (req, res) => {
             };
         });
 
-        // 最新10件のみ返す
-        res.json(newsData.slice(0, 10));
+        // 全件返す（ページネーションはクライアント側で処理）
+        res.json(newsData);
     } catch (error) {
         console.error('RSS Fetch Error:', error);
         res.status(500).json({ error: 'Failed to fetch news' });
@@ -54,7 +54,7 @@ app.get('/api/news', async (req, res) => {
 });
 
 // 静的ファイルの配信 (HTML, CSS, JS, 画像など)
-app.use(express.static(path.join(__dirname, '/')));
+app.use(express.static(path.join(__dirname, '../../')));
 
 // サーバー起動
 app.listen(port, () => {

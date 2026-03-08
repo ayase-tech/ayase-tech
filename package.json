@@ -2,9 +2,9 @@
     "name": "ayase-tech-website",
     "version": "1.0.0",
     "description": "Corporate website and news API for ayase-tech",
-    "main": "server.js",
+    "main": "assets/Javascript/server.js",
     "scripts": {
-        "start": "node server.js"
+        "start": "node assets/Javascript/server.js"
     },
     "dependencies": {
         "express": "^4.18.2",

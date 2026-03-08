@@ -133,8 +133,8 @@ function initScrollAnimations() {
 /* ---------- News Label Filters ---------- */
 function initNewsFilters() {
     const buttons = document.querySelectorAll('.news-filter-btn');
-    const items = document.querySelectorAll('.news-item');
-    if (!buttons.length || !items.length) return;
+    const container = document.getElementById('news-container-all');
+    if (!buttons.length || !container) return;
 
     buttons.forEach(btn => {
         btn.addEventListener('click', () => {
@@ -144,21 +144,8 @@ function initNewsFilters() {
             buttons.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
 
-            // Filter items
-            items.forEach(item => {
-                if (filter === 'all' || item.dataset.label === filter) {
-                    item.style.display = '';
-                    item.style.opacity = '0';
-                    item.style.transform = 'translateY(8px)';
-                    requestAnimationFrame(() => {
-                        item.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-                        item.style.opacity = '1';
-                        item.style.transform = 'translateY(0)';
-                    });
-                } else {
-                    item.style.display = 'none';
-                }
-            });
+            // Re-render with pagination and filter
+            renderNewsPage(container, 1, filter);
         });
     });
 }
@@ -182,6 +169,11 @@ function setActiveNav() {
 }
 
 /* ---------- Dynamic News Loader ---------- */
+const NEWS_PER_PAGE = 10;
+const NEWS_TOP_COUNT = 5;
+let allNewsData = [];
+let currentPage = 1;
+
 async function loadNews() {
     const containerAll = document.getElementById('news-container-all');
     const containerTop = document.getElementById('news-container-top');
@@ -195,30 +187,96 @@ async function loadNews() {
         // Fetch from the Node.js API instead of data/news.json
         const res = await fetch(prefix + 'api/news');
         if (!res.ok) throw new Error('Failed to load news data from API');
-        const newsData = await res.json();
-
-        const renderNews = (items) => {
-            return items.map(item => `
-                <div class="news-item" data-label="${item.label}">
-                    <span class="news-date">${item.date}</span>
-                    <span class="label label--${item.label}">${item.labelName}</span>
-                    <span class="news-title"><a href="${item.url}">${item.title}</a></span>
-                </div>
-            `).join('');
-        };
+        allNewsData = await res.json();
 
         if (containerAll) {
-            containerAll.innerHTML = renderNews(newsData);
+            renderNewsPage(containerAll, 1);
             initNewsFilters(); // Initialize filters after rendering items
         }
 
         if (containerTop) {
-            // Show only latest 3 news on top page
-            containerTop.innerHTML = renderNews(newsData.slice(0, 3));
+            // Show latest 5 news with labels on top page
+            containerTop.innerHTML = renderNews(allNewsData.slice(0, NEWS_TOP_COUNT));
         }
     } catch (e) {
         console.warn('News could not be loaded:', e);
     }
+}
+
+function renderNews(items) {
+    return items.map(item => `
+        <div class="news-item" data-label="${item.label}">
+            <span class="news-date">${item.date}</span>
+            <span class="label label--${item.label}">${item.labelName}</span>
+            <span class="news-title"><a href="${item.url}">${item.title}</a></span>
+        </div>
+    `).join('');
+}
+
+function renderNewsPage(container, page, filterLabel) {
+    currentPage = page;
+
+    // Filter items if a label filter is active
+    let items = allNewsData;
+    if (filterLabel && filterLabel !== 'all') {
+        items = allNewsData.filter(item => item.label === filterLabel);
+    }
+
+    const totalPages = Math.ceil(items.length / NEWS_PER_PAGE);
+    const start = (page - 1) * NEWS_PER_PAGE;
+    const pageItems = items.slice(start, start + NEWS_PER_PAGE);
+
+    // Render news items
+    container.innerHTML = renderNews(pageItems);
+
+    // Render pagination
+    renderPagination(container, page, totalPages, filterLabel);
+}
+
+function renderPagination(container, currentPage, totalPages, filterLabel) {
+    if (totalPages <= 1) return;
+
+    let paginationHTML = '<div class="pagination">';
+
+    // Previous button
+    if (currentPage > 1) {
+        paginationHTML += `<button class="pagination__btn pagination__prev" data-page="${currentPage - 1}">← 前へ</button>`;
+    } else {
+        paginationHTML += `<button class="pagination__btn pagination__prev" disabled>← 前へ</button>`;
+    }
+
+    // Page numbers
+    paginationHTML += '<div class="pagination__pages">';
+    for (let i = 1; i <= totalPages; i++) {
+        if (i === currentPage) {
+            paginationHTML += `<button class="pagination__btn pagination__page pagination__page--active" data-page="${i}">${i}</button>`;
+        } else if (i === 1 || i === totalPages || Math.abs(i - currentPage) <= 1) {
+            paginationHTML += `<button class="pagination__btn pagination__page" data-page="${i}">${i}</button>`;
+        } else if (Math.abs(i - currentPage) === 2) {
+            paginationHTML += `<span class="pagination__ellipsis">…</span>`;
+        }
+    }
+    paginationHTML += '</div>';
+
+    // Next button
+    if (currentPage < totalPages) {
+        paginationHTML += `<button class="pagination__btn pagination__next" data-page="${currentPage + 1}">次へ →</button>`;
+    } else {
+        paginationHTML += `<button class="pagination__btn pagination__next" disabled>次へ →</button>`;
+    }
+
+    paginationHTML += '</div>';
+    container.insertAdjacentHTML('beforeend', paginationHTML);
+
+    // Bind pagination click events
+    container.querySelectorAll('.pagination__btn[data-page]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const page = parseInt(btn.dataset.page, 10);
+            renderNewsPage(container, page, filterLabel);
+            // Scroll to top of news container
+            container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    });
 }
 
 /* ---------- Cookie Consent ---------- */
@@ -331,7 +389,7 @@ function updateThemeIcon() {
     const icon = document.querySelector('.theme-icon');
     if (!icon) return;
     const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-    icon.textContent = isDark ? '☀️' : '🌙';
+    icon.innerHTML = isDark ? '<img src="../assets/mode/lightmode.png" alt="theme-icon">' : '<img src="../assets/mode/darkmode.png" alt="theme-icon">';
     updateLogoImages(isDark);
 }
 

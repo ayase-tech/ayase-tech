@@ -21,8 +21,9 @@
 
   /* Neutrals */
   --color-bg: #ffffff;
-  --color-bg-alt: #f7f7f7;
+  --color-bg-alt: #f0f0f0;
   --color-bg-white: #ffffff;
+  --color-bg-dark: #e2e2e2;
   --color-text: #1a1a1a;
   --color-text-light: #666666;
   --color-text-lighter: #999999;
@@ -165,6 +166,7 @@ h4 {
   font-size: 1.05rem;
   color: var(--color-text-light);
   max-width: 640px;
+  margin: 0 auto;
   line-height: 1.8;
 }
 
@@ -189,6 +191,10 @@ h4 {
 
 .section--white {
   background-color: var(--color-bg-white);
+}
+
+.section--dark {
+  background-color: var(--color-bg-dark);
 }
 
 .section--primary {
@@ -258,11 +264,11 @@ h4 {
   width: 36px;
   height: 36px;
   border-radius: var(--border-radius);
-  background: var(--color-primary);
+  background: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
+  color: var(--color-primary);
   font-size: 1rem;
   font-weight: 800;
   overflow: hidden;
@@ -399,8 +405,8 @@ h4 {
 
 /* ---------- Footer ---------- */
 .site-footer {
-  background: var(--color-primary-dark);
-  color: rgba(255, 255, 255, 0.7);
+  background: var(--footer-bg, #f0f0f0);
+  color: var(--footer-text, #555555);
   padding: var(--space-3xl) 0 var(--space-xl);
 }
 
@@ -412,12 +418,12 @@ h4 {
 }
 
 .footer-brand .logo {
-  color: #fff;
+  color: var(--footer-heading, #1a1a1a);
   margin-bottom: var(--space-md);
 }
 
 .footer-brand .logo .logo-icon {
-  background: rgba(255, 255, 255, 0.15);
+  background: var(--footer-logo-bg, rgba(0, 0, 0, 0.08));
 }
 
 .footer-brand p {
@@ -427,7 +433,7 @@ h4 {
 }
 
 .footer-col h4 {
-  color: #fff;
+  color: var(--footer-heading, #1a1a1a);
   font-size: 0.875rem;
   font-weight: 600;
   margin-bottom: var(--space-md);
@@ -437,18 +443,18 @@ h4 {
 
 .footer-col a {
   display: block;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--footer-link, #666666);
   font-size: 0.875rem;
   padding: var(--space-xs) 0;
   transition: color var(--transition-fast);
 }
 
 .footer-col a:hover {
-  color: var(--color-accent-light);
+  color: var(--color-primary);
 }
 
 .footer-bottom {
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid var(--footer-border, rgba(0, 0, 0, 0.1));
   padding-top: var(--space-lg);
   display: flex;
   justify-content: space-between;
@@ -579,18 +585,21 @@ h4 {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: var(--space-xl);
+  justify-content: center;
 }
 
 .grid-3 {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: var(--space-xl);
+  justify-content: center;
 }
 
 .grid-4 {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: var(--space-xl);
+  justify-content: center;
 }
 
 /* ---------- Hero ---------- */
@@ -600,6 +609,7 @@ h4 {
   min-height: 80vh;
   display: flex;
   align-items: center;
+  background-color: var(--color-bg-dark);
 }
 
 .hero-grid {
@@ -1007,8 +1017,10 @@ h4 {
 /* ---------- Tile Grid (Showcase) ---------- */
 .tile-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: var(--space-md);
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 .tile {
@@ -1271,6 +1283,14 @@ h4 {
   --color-bg: #0e0e0e;
   --color-bg-alt: #161616;
   --color-bg-white: #111111;
+  --color-bg-dark: #000000;
+
+  --footer-bg: #000000;
+  --footer-text: rgba(255, 255, 255, 0.7);
+  --footer-heading: #ffffff;
+  --footer-link: rgba(255, 255, 255, 0.6);
+  --footer-logo-bg: rgba(255, 255, 255, 0.15);
+  --footer-border: rgba(255, 255, 255, 0.1);
   --color-text: #e8e8e8;
   --color-text-light: #a0a0a0;
   --color-text-lighter: #707070;
@@ -1298,8 +1318,8 @@ h4 {
 }
 
 [data-theme="dark"] .logo-icon {
-  background: #ffffff;
-  color: #000000;
+  background: #000000;
+  color: #ffffff;
 }
 
 [data-theme="dark"] .nav-links a {
@@ -1400,14 +1420,7 @@ h4 {
   color: #000000;
 }
 
-[data-theme="dark"] .site-footer {
-  background: #000000;
-}
-
-[data-theme="dark"] .footer-brand .logo .logo-icon {
-  background: rgba(255, 255, 255, 0.15);
-  color: #ffffff;
-}
+/* Footer colors handled via CSS variables in [data-theme="dark"] root block */
 
 [data-theme="dark"] .spec-table thead th {
   background: #1a1a1a;
@@ -1494,9 +1507,17 @@ h4 {
     --color-accent-subtle: #1a1a1a;
 
     --color-bg: #0e0e0e;
-    --color-bg-alt: #161616;
+    --color-bg-alt: #1a1a1a;
     --color-bg-white: #111111;
+    --color-bg-dark: #000000;
     --color-text: #e8e8e8;
+
+    --footer-bg: #000000;
+    --footer-text: rgba(255, 255, 255, 0.7);
+    --footer-heading: #ffffff;
+    --footer-link: rgba(255, 255, 255, 0.6);
+    --footer-logo-bg: rgba(255, 255, 255, 0.15);
+    --footer-border: rgba(255, 255, 255, 0.1);
     --color-text-light: #a0a0a0;
     --color-text-lighter: #707070;
     --color-border: #2a2a2a;
@@ -1909,6 +1930,60 @@ h4 {
   .section-header {
     margin-bottom: var(--space-xl);
   }
+}
+
+
+/* ---------- News Pagination ---------- */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-2xl);
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--color-border-light);
+}
+
+.pagination__pages {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.pagination__btn {
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 0.4rem 0.85rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  background: var(--color-bg-white);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.pagination__btn:hover:not(:disabled) {
+  background: var(--color-primary);
+  color: #fff;
+  border-color: var(--color-primary);
+}
+
+.pagination__page--active {
+  background: var(--color-primary);
+  color: #fff;
+  border-color: var(--color-primary);
+}
+
+.pagination__btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.pagination__ellipsis {
+  padding: 0 var(--space-xs);
+  color: var(--color-text-lighter);
+  font-size: 0.9rem;
 }
 
 /* ---------- Cookie Consent Banner ---------- */
